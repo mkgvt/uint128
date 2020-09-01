@@ -102,6 +102,27 @@ Ensure(uint128_tests, le128toh_is_valid) {
 #endif
 }
 
+Ensure(uint128_tests, ne128tohe_is_valid) {
+  uint32_t a32[4] = {0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f};
+  uint128_t v128 = make_uint128(a32);
+  uint128_t h128 = be128toh(v128);
+#if BYTE_ORDER == BIG_ENDIAN
+  assert_that(h128, is_equal_to(v128));
+#elif BYTE_ORDER == LITTLE_ENDIAN
+  assert_that(h128, is_equal_to(bswap_128(v128)));
+#endif
+}
+
+Ensure(uint128_tests, he128tone_is_valid) {
+  uint32_t a32[4] = {0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f};
+  uint128_t v128 = make_uint128(a32);
+  uint128_t h128 = be128toh(v128);
+#if BYTE_ORDER == BIG_ENDIAN
+  assert_that(h128, is_equal_to(v128));
+#elif BYTE_ORDER == LITTLE_ENDIAN
+  assert_that(h128, is_equal_to(bswap_128(v128)));
+#endif
+}
 
 //-------------------------------------------------------------------------------
 
@@ -115,6 +136,8 @@ TestSuite *uint128_tests() {
     add_test_with_context(suite, uint128_tests, htole128_is_valid);
     add_test_with_context(suite, uint128_tests, be128toh_is_valid);
     add_test_with_context(suite, uint128_tests, le128toh_is_valid);
+    add_test_with_context(suite, uint128_tests, ne128tohe_is_valid);
+    add_test_with_context(suite, uint128_tests, he128tone_is_valid);
     
     return suite;
 }
