@@ -108,24 +108,4 @@ static inline uint128_t le128toh(uint128_t x) {
 }
 
 
-static inline uint128_t ne128tohe(uint128_t x) {
-  #if BYTE_ORDER == BIG_ENDIAN
-  // noop
-  #elif BYTE_ORDER == LITTLE_ENDIAN
-  return bswap_128(x);
-  #endif
-  return x;
-}
-
-
-static inline uint128_t he128tone(uint128_t x) {
-  #if BYTE_ORDER == BIG_ENDIAN
-  // noop
-  #elif BYTE_ORDER == LITTLE_ENDIAN
-  return bswap_128(x);
-  #endif
-  return x;
-}
-
-
 #endif // __UINT128_H
