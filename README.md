@@ -22,7 +22,7 @@ supported by the C standard.
 
 To the degree possible, operations on `uint128_t` follows standards and existing
 conventions. For example, functions for swapping bytes around to convert from
-big endian to little endian follows established patterns.
+big endian to little endian follows established patterns from endian.h.
 
 Some operations on 128-bit unsigned integers are clunky without compiler and
 library support. Assigning a 128-bit unsigned integer literal to a variable

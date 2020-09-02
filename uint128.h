@@ -21,6 +21,7 @@
 #ifndef __UINT128_H
 #define __UINT128_H
 
+#include <assert.h>
 #include <byteswap.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -39,21 +40,6 @@ static inline uint128_t make_uint128(uint32_t x[4]) {
     ((uint128_t) x[1]) << 64 |
     ((uint128_t) x[2]) << 32 |
      (uint128_t) x[3];
-}
-
-
-/* --- 128-bit substitute for man (3) snprintf --- */
-
-// This probably should not be a inline function but it is the only in the
-// library (so far)...
-static inline char *stringify_uint128(char *str, size_t size, uint128_t x) {
-  char buf[2 * sizeof(uint128_t) + 3];
-  strncpy(buf, "0x", sizeof(buf));
-  for (int o = 2, s = 96; o < 32; o += 8, s -= 32) {
-    snprintf(buf +  o, 9, "%08x", (uint32_t) (x >> s));
-  }
-  memcpy(str, buf, size);
-  return str;
 }
 
 
@@ -105,6 +91,29 @@ static inline uint128_t le128toh(uint128_t x) {
   return bswap_128(x);
   #endif
   return x;
+}
+
+
+/* --- 128-bit substitute for man (3) snprintf --- */
+
+// Convert uint128_t to string in native-endian order.
+// This probably should not be a inline function but
+// it is the only on in the library (so far)...
+static inline char *stringify_uint128(char *str, size_t size, uint128_t x) {
+  const size_t strsize = 2 * sizeof(uint128_t) + 3;
+  assert(size >= strsize);
+
+  // Process in big-endian order
+  x = htobe128(x);
+  uint8_t *bytes = (uint8_t *) &x;
+  strncpy(str, "0x", size);
+  size_t offset = 2;
+  for (size_t i = 0; i < sizeof(x); ++i) {
+    snprintf(str + offset, size, "%02X", bytes[i]);
+    offset +=2;
+  }
+  *(str + offset) = '\0';
+  return str;
 }
 
 

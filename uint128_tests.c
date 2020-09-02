@@ -45,7 +45,7 @@ Ensure(uint128_tests, stringify_uint128_is_valid) {
   char cbuf[2 * sizeof(uint128_t) + 3];  // leave room for 0x prefix and \0
   char *str = stringify_uint128(cbuf, sizeof(cbuf), v128);
   assert_that(str, is_equal_to(cbuf));
-  assert_that(cbuf, is_equal_to_string("0x000102030405060708090a0b0c0d0e0f"));
+  assert_that(cbuf, is_equal_to_string("0x000102030405060708090A0B0C0D0E0F"));
 }
 
 Ensure(uint128_tests, bswap_128_is_valid) {
